@@ -84,7 +84,7 @@ async def generate(request: QueryRequest):
         vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedder)
     else:
         print("[INFO] Creating and persisting new vector store...")
-        loader = PDFLoader("/Users/saksham/Desktop/RCC_RAG_Prototype/data/sample_docs/Saksham_Pattem_Resume_SWE.pdf")
+        loader = PDFLoader("/Users/saksham/Desktop/RCC_RAG_Prototype/data/sample_docs/cancers-13-04751-v2.pdf")
         documents = loader.load_and_split()
         vectordb = Chroma.from_documents(documents, embedder, persist_directory=persist_directory)
         vectordb.persist()
