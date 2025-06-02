@@ -8,3 +8,5 @@ __pycache__/
 .idea/
 *.egg-info/
 vector_db/
+.venv/
+/Users/saksham/Desktop/RCC_RAG_Prototype/data/sample_docs/Saksham_Pattem_Resume_SWE.pdf
