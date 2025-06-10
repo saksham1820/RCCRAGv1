@@ -20,9 +20,12 @@ class FileLoader:
             return []
         return loader.load()
     
-    def splitter(self, docs):
-        splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
-        return splitter.split_documents(docs)
+class Splitter:
+        def __init__(self):
+            self.splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    
+        def split(self, docs):
+            return self.splitter.split_documents(docs)
     
 class LoadLabels:
     def __init__(self, path):
@@ -52,6 +55,7 @@ if __name__ == "__main__":
             doc.metadata.update(meta)
         all_docs.extend(docs)
     
-    print(all_docs[0])
-        
+    splitter = Splitter()
+    splitted_docs = splitter.split(all_docs)
+    import pdb; pdb.set_trace()
     
