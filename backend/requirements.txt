@@ -12,3 +12,5 @@ fastapi
 uvicorn
 pydantic
 python-dotenv
+langchain_ollama
+pandas
