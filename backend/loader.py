@@ -5,20 +5,32 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTex
 import pandas as pd
 import os
 import glob
+import logging
+from app.rag.embedder import HuggingFaceEmbedder
+from app.rag.vector_store import ChromaVectorStore
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class FileLoader:
     def __init__(self, filepath):
         self.filepath = filepath
 
     def lang_loader(self):
+        logger.info(f"Processing file: {self.filepath}")
         if self.filepath.endswith(".pdf"):
             loader = PyPDFLoader(self.filepath)
+            docs = loader.load()
+            logger.info(f"Loaded {len(docs)} pages from PDF")
+            return docs
         elif self.filepath.endswith(".txt"):
             loader = TextLoader(self.filepath)
+            docs = loader.load()
+            logger.info(f"Loaded {len(docs)} documents from text file")
+            return docs
         else:
-            print(f"Skipping unsupported file type: {self.filepath}")
+            logger.info(f"Skipping unsupported file type: {self.filepath}")
             return []
-        return loader.load()
     
 class Splitter:
         def __init__(self):
@@ -56,6 +68,14 @@ if __name__ == "__main__":
         all_docs.extend(docs)
     
     splitter = Splitter()
-    splitted_docs = splitter.split(all_docs)
-    import pdb; pdb.set_trace()
+    split_docs = splitter.split(all_docs)
     
+    embedder = HuggingFaceEmbedder().model
+    vector_db = ChromaVectorStore(embedder)
+    vector_db.add_documents(split_docs)
+
+    results = vector_db.store.similarity_search("What is the name of this research paper?", k=3)
+    for i, doc in enumerate(results):
+        print(f"Result {i+1}: {doc.page_content[:200]}")
+
+    vector_db.store.persist()

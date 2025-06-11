@@ -14,3 +14,6 @@ pydantic
 python-dotenv
 langchain_ollama
 pandas
+awscli
+boto3
+streamlit

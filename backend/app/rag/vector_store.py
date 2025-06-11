@@ -1,13 +1,13 @@
 # FAISS/Chroma logic
 
 from langchain_community.vectorstores import FAISS
-from langchain_chroma import Chroma
+from langchain.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
+# from app.core.config import VECTOR_DB_PATH
 
 class ChromaVectorStore:
-    def __init__(self, embedder, path="./vector_db"):
+    def __init__(self, embedder, path="/Users/saksham/Desktop/RCC_RAG_Prototype/backend/app/rag/vector_db"):
         self.store = Chroma(
-            collection_name="rag_docs",
             embedding_function=embedder,
             persist_directory=path
         )
@@ -17,6 +17,7 @@ class ChromaVectorStore:
 
     def add_documents(self, documents):
         self.store.add_documents(documents)
+        self.store.persist()
 
     def similarity_search(self, query, k=5):
         return self.store.similarity_search(query, k=k)

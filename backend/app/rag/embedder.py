@@ -1,6 +1,7 @@
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_huggingface import HuggingFaceEmbeddings
-
+from langchain_community.embeddings import BedrockEmbeddings
+# import boto3
 
 class OpenAIEmbedder:
     def __init__(self):
@@ -23,10 +24,18 @@ class HuggingFaceEmbedder():
 
     def embed(self, texts):
         return self.model.embed_documents(texts)
+    
+# class BedrockEmbedder:
+#     def __init__(self):
+#         self.client = boto3.client(service_name = "bedrock-runtime")
+#         self.model = BedrockEmbeddings(model_id = "MODEL ID", client=self.client)
+
+#     def embed(self, )
 
 if __name__ == "__main__":
     # Example usage of the Embedder class
     embedder_instance = HuggingFaceEmbedder().model
+
     texts = ["Hello, world!", "This is a test document."]
     embeddings = embedder_instance.embed(texts)
     print("Embeddings:", embeddings)
